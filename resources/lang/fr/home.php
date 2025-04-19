@@ -1,0 +1,36 @@
+<?php
+
+
+return [
+	"p1" => "EXHALEZ LA DOUCEUR",
+	"p3" => "Meilleur endroit pour acheter des composants PC",
+	"p2" => "COOPÉRATION DE JEU",
+	"shop" => "ACHETEZ MAINTENANT",
+	"discover" => "DÉCOUVRIR",
+	"nvidia" => "ULTRA RAPIDE, ULTRA PUISSANT",
+	"ao" => "LA PUISSANCE DE LA BEAUTÉ",
+	"trend" => "Tendance de la semaine",
+	"mind" => "Ce qui occupe nos pensées",
+	"your" => "PRÊT POUR ",
+	"power" => " LA PUISSANCE",
+	"head" => "Actualités et" ,
+	"lines" => "Titres",
+	"desc" => "Notre succès dans la création de solutions commerciales est en grande partie dû à notre équipe talentueuse et hautement engagée.",
+	"nav1" => "ACCUEIL",
+	"nav2" => "Jeux",
+	"nav3" => "Consoles",
+	"nav4" => "Accessoires",
+	"nav5" => "Configuration",
+	"navCc" => "Profil Client",
+	"navCs" => "Panier",
+	"navA" => "Ajouter des produits",
+	"navU" => "S'inscrire",
+	"navAll" => "Connexion",
+	"email"=>"Email",
+	"Deconnect"=>"DÉCONNEXION	",
+	"read" => "Lire la suite",
+	"cardT1" => "Entreprises innovantes partout dans le monde.",
+	"cardT2" => "Le soutien des experts financiers vous aide à découvrir.",
+	"card" => "Les experts financiers vous soutiennent ou vous aident à découvrir comment augmenter vos fonds davantage...",
+]
+;
