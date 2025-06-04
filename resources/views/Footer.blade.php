@@ -103,9 +103,8 @@
 
           <p class="title footer-list-title has-after">Newsletter Signup</p>
 
-          <form action="./index.html" method="get" class="footer-form">
-            <input type="email" name="email_address" required placeholder="Your Email" autocomplete="off"
-              class="input-field">
+          <form action="{{ route('register') }}" method="get" class="footer-form">
+            <input type="email" name="email" required class="input-field">
 
             <button type="submit" class="btn" data-btn>Subscribe Now</button>
           </form>

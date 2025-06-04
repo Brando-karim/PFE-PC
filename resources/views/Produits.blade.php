@@ -1,78 +1,444 @@
 @extends('Master')
-@section('title',$Categorie.' Products')
+@section('title', $Categorie . ' Products')
 @section('content')
+
 <style>
-  .card:hover {
-    transform: scale(1.05);
-    box-shadow: 0 8px 16px rgba(255, 255, 255, 0.2);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  .product-card {
+    background: linear-gradient(145deg, #2d3748, #1a202c);
+    border: 1px solid #4a5568;
+    border-radius: 16px;
+    overflow: hidden;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .product-card:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+    border-color: #63b3ed;
+  }
+
+  .product-image {
+    position: relative;
+    overflow: hidden;
+    height: 280px;
+  }
+
+  .product-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: {{ $Categorie == 'Consoles' ? 'contain' : 'cover' }};
+    transition: transform 0.3s ease;
+  }
+
+  .product-card:hover .product-image img {
+    transform: scale(1.1);
+  }
+
+  .product-image::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.1) 100%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  .product-card:hover .product-image::after {
+    opacity: 1;
+  }
+
+  .product-content {
+    padding: 1.5rem;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .product-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #f7fafc;
+    margin-bottom: 0.75rem;
+    line-height: 1.3;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .product-description {
+    color: #a0aec0;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    margin-bottom: 1rem;
+    flex-grow: 1;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .product-price {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 0.75rem 1.5rem;
+    margin: 0 -1.5rem 1.5rem -1.5rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+    text-align: center;
+    border-top: 1px solid #4a5568;
+  }
+
+  .product-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .btn-primary-custom {
+    background: linear-gradient(135deg, #4299e1 0%, #3182ce 100%);
+    border: none;
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .btn-primary-custom:hover {
+    background: linear-gradient(135deg, #3182ce 0%, #2c5282 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(66, 153, 225, 0.4);
+    color: white;
+    text-decoration: none;
+  }
+
+  .action-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    cursor: pointer;
+  }
+
+  .view-icon {
+    background: rgba(72, 187, 120, 0.2);
+    color: #48bb78;
+    border: 1px solid #48bb78;
+  }
+
+  .view-icon:hover {
+    background: #48bb78;
+    color: white;
+    transform: scale(1.1);
+  }
+
+  .edit-icon {
+    background: rgba(237, 137, 54, 0.2);
+    color: #ed8936;
+    border: 1px solid #ed8936;
+  }
+
+  .edit-icon:hover {
+    background: #ed8936;
+    color: white;
+    transform: scale(1.1);
+  }
+
+  .delete-icon {
+    background: rgba(245, 101, 101, 0.2);
+    color: #f56565;
+    border: 1px solid #f56565;
+  }
+
+  .delete-icon:hover {
+    background: #f56565;
+    color: white;
+    transform: scale(1.1);
+  }
+
+  .admin-actions {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+  }
+
+  .page-header {
+    text-align: center;
+    margin-bottom: 3rem;
+    padding: 2rem 0;
+  }
+
+  .page-title {
+    font-size: 2.5rem;
+    font-weight: 800;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 0.5rem;
+  }
+
+  .page-subtitle {
+    color: #a0aec0;
+    font-size: 1.1rem;
+  }
+
+  .products-grid {
+    padding: 0 2rem;
+  }
+
+  @media (max-width: 768px) {
+    .products-grid {
+      padding: 0 1rem;
+    }
+    
+    .product-actions {
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+    
+    .admin-actions {
+      justify-content: center;
+    }
+  }
+
+  .brand-filter {
+    background: rgba(45, 55, 72, 0.8);
+    padding: 1.5rem;
+    border-radius: 12px;
+    backdrop-filter: blur(10px);
+  }
+
+  .brand-btn {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    transition: all 0.3s ease;
+    font-size: 0.9rem;
+  }
+
+  .brand-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
+  }
+
+  .brand-btn.active {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-color: transparent;
+  }
+
+  .no-products-container {
+    background: rgba(45, 55, 72, 0.9);
+    padding: 2rem;
+    border-radius: 12px;
+    backdrop-filter: blur(10px);
+    max-width: 400px;
+    margin: 0 auto;
+    animation: fadeIn 0.5s ease-in;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  .no-products-container h3 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+  }
+
+  .no-products-container p {
+    font-size: 1.1rem;
   }
 </style>
-<h1 align='center'>    {{
-  $Categorie == 'Consoles' ? '-- Our Consoles --' :
-  ($Categorie == 'Games' ? '-- Our Games --' :
-  ($Categorie == 'Accescoires' ? 'Our Accescoires' : "Our Setup's"))
-}}</h1>
-<div class="row row-cols-1 row-cols-md-{{ $Categorie == 'Consoles' ? 2 : 4 }} g-4 p-5" >
 
-@foreach ($produits as $p) 
-    
-<div class="col ">
-  <div class="card h-100 bg-dark" style="color: white ">
-      <img src="{{ $p->Img }}" alt="Image of {{ $p->Titre }}" class="card-img-top" alt="..." style="height:414px; {{ $Categorie == 'Consoles' ? 'object-fit:contain' : 'object-fit:cover' }};">
-      <div class="card-body">
-          <h5 class="card-title">{{ $p->Titre }}</h5>
-          <p class="card-text">{{ $p->Contenu }}</p>
-      </div>
-      <ul class="list-group list-group-flush">
-          <li class="list-group-item bg-dark" style="color: white">{{ $p->Price }}</li>
-      </ul>
-      <div class="card-body d-flex justify-content-between align-items-center">
-          <button class="btn">
-              <a href="/produits/{{$p->id}}" class="card-link">Buy</a>
-          </button>
+<div class="page-header">
+  <h1 class="page-title">
+    @if($Categorie == 'Consoles')
+      Our Premium Consoles
+    @elseif($Categorie == 'Components')
+      High-Performance Components
+    @elseif($Categorie == 'Accescoires')
+      Essential Accessories
+    @elseif($Categorie == 'Setup')
+      Complete Gaming Setups
+    @else
+      Our Products
+    @endif
+  </h1>
+  <p class="page-subtitle">Discover our carefully curated collection of {{ strtolower($Categorie) }}</p>
+</div>
 
-          {{-- View Button --}}
-          <a href="/produits/{{$p->id}}">
-            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 795 614">
-              <path fill="currentColor" 
-              d="M397.25 278c38 0 69 31 69 69s-31 68-69 68s-68-30-68-68s30-69 68-69zm0-170c226 0 389 212 389 212c11 14 11 39 0 53c0 0-163 212-389 212s-389-212-389-212c-11-14-11-39 0-53c0 0 163-212 389-212zm0 410c94 0 171-77 171-171s-77-171-171-171s-171 77-171 171s77 171 171 171z"/>
-            </svg>        </a>
-          
-      </div>
-     
-      <div class="card-body d-flex  align-items-center  justify-content-between">
-        @if(Auth::check() && Auth::user()->role === App\Models\User::ROLE_ADMIN)
-              {{-- Delete Button --}}
-            <form action="{{ route('produits.destroy',  $p->id) }}" method="POST">                 
-              @csrf 
-                @method('delete') 
-                <button type="submit" class="btn btn-danger" value="delete" > 
-            <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="30" height="30" viewBox="0,0,256,256">
-              <g fill="#eb0808" fill-rule="nonzero" stroke="none" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10" stroke-dasharray="" stroke-dashoffset="0" font-family="none" font-weight="none" font-size="none" text-anchor="none" style="mix-blend-mode: normal"><g transform="scale(8.53333,8.53333)"><path d="M14.98438,2.48633c-0.55152,0.00862 -0.99193,0.46214 -0.98437,1.01367v0.5h-5.5c-0.26757,-0.00363 -0.52543,0.10012 -0.71593,0.28805c-0.1905,0.18793 -0.29774,0.44436 -0.29774,0.71195h-1.48633c-0.36064,-0.0051 -0.69608,0.18438 -0.87789,0.49587c-0.18181,0.3115 -0.18181,0.69676 0,1.00825c0.18181,0.3115 0.51725,0.50097 0.87789,0.49587h18c0.36064,0.0051 0.69608,-0.18438 0.87789,-0.49587c0.18181,-0.3115 0.18181,-0.69676 0,-1.00825c-0.18181,-0.3115 -0.51725,-0.50097 -0.87789,-0.49587h-1.48633c0,-0.26759 -0.10724,-0.52403 -0.29774,-0.71195c-0.1905,-0.18793 -0.44836,-0.29168 -0.71593,-0.28805h-5.5v-0.5c0.0037,-0.2703 -0.10218,-0.53059 -0.29351,-0.72155c-0.19133,-0.19097 -0.45182,-0.29634 -0.72212,-0.29212zM6,9l1.79297,15.23438c0.118,1.007 0.97037,1.76563 1.98438,1.76563h10.44531c1.014,0 1.86538,-0.75862 1.98438,-1.76562l1.79297,-15.23437z"></path></g></g>
-              </svg>     
-                </button> 
-              </form>
-              
-                        {{-- Modify Button --}}
-          <a href="{{route('produits.edit', $p)}}">
-            <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="25" height="25la" viewBox="0,0,256,256">
-              <g fill="#44cb3d" fill-rule="nonzero" stroke="none" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10" stroke-dasharray="" stroke-dashoffset="0" font-family="none" font-weight="none" font-size="none" text-anchor="none" style="mix-blend-mode: normal"><g transform="scale(5.12,5.12)"><path d="M43.125,2c-1.24609,0 -2.48828,0.48828 -3.4375,1.4375l-0.8125,0.8125l6.875,6.875c-0.00391,0.00391 0.8125,-0.8125 0.8125,-0.8125c1.90234,-1.90234 1.89844,-4.97656 0,-6.875c-0.95312,-0.94922 -2.19141,-1.4375 -3.4375,-1.4375zM37.34375,6.03125c-0.22656,0.03125 -0.4375,0.14453 -0.59375,0.3125l-32.4375,32.46875c-0.12891,0.11719 -0.22656,0.26953 -0.28125,0.4375l-2,7.5c-0.08984,0.34375 0.01172,0.70703 0.26172,0.95703c0.25,0.25 0.61328,0.35156 0.95703,0.26172l7.5,-2c0.16797,-0.05469 0.32031,-0.15234 0.4375,-0.28125l32.46875,-32.4375c0.39844,-0.38672 0.40234,-1.02344 0.01563,-1.42187c-0.38672,-0.39844 -1.02344,-0.40234 -1.42187,-0.01562l-32.28125,32.28125l-4.0625,-4.0625l32.28125,-32.28125c0.30078,-0.28906 0.39063,-0.73828 0.22266,-1.12109c-0.16797,-0.38281 -0.55469,-0.62109 -0.97266,-0.59766c-0.03125,0 -0.0625,0 -0.09375,0z"></path></g></g>
-              </svg>          </a>
-              @endif
-              
-              
-              
-
-
-      </div>
-    
-      
+<!-- Brand Filter Section -->
+<div class="container mb-4">
+  <div class="brand-filter">
+    <h5 class="text-white mb-3">Filter by Brand:</h5>
+    <div class="d-flex flex-wrap gap-2">
+      <button class="brand-btn active" data-brand="all">All Brands</button>
+      <button class="brand-btn" data-brand="asus">ASUS</button>
+      <button class="brand-btn" data-brand="msi">MSI</button>
+      <button class="brand-btn" data-brand="gigabyte">GIGABYTE</button>
+      <button class="brand-btn" data-brand="amd">AMD</button>
+      <button class="brand-btn" data-brand="nvidia">NVIDIA</button>
+      <button class="brand-btn" data-brand="intel">Intel</button>
+      <button class="brand-btn" data-brand="aorus">AORUS</button>
+      <button class="brand-btn" data-brand="kingston">KINGSTON</button>
+      <button class="brand-btn" data-brand="toughram">TOUGHRAM</button>
+      <button class="brand-btn" data-brand="lexar">LEXAR</button>
+      <button class="brand-btn" data-brand="samsung">Samsung</button>
+      <button class="brand-btn" data-brand="setup game">SETUP GAME</button>
+    </div>
   </div>
 </div>
-      @endforeach
+
+<div class="products-grid">
+  <div class="row row-cols-1 row-cols-md-{{ $Categorie == 'Consoles' ? '2' : '3' }} row-cols-lg-{{ $Categorie == 'Consoles' ? '3' : '4' }} g-4">
+    @foreach ($produits as $p)
+    <div class="col">
+      <div class="product-card">
+        <div class="product-image">
+          <img src="{{ $p->Img }}" alt="Image of {{ $p->Titre }}" loading="lazy">
+        </div>
+        
+        <div class="product-content">
+          <h5 class="product-title">{{ $p->Titre }}</h5>
+          <p class="product-description">{{ $p->Contenu }}</p>
+        </div>
+        
+        <div class="product-price">
+          {{ $p->Price }}
+        </div>
+        
+        <div class="product-actions">
+          <a href="/produits/{{ $p->id }}" class="btn-primary-custom">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.08-.14.12-.31.12-.48 0-.55-.45-1-1-1H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"/>
+            </svg>
+            Buy Now
+          </a>
+          
+          <div class="admin-actions">
+            <a href="/produits/{{ $p->id }}" class="action-icon view-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/>
+              </svg>
+            </a>
+            
+            @if(Auth::check() && Auth::user()->role === App\Models\User::ROLE_ADMIN)
+              <a href="{{ route('produits.edit', $p) }}" class="action-icon edit-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/>
+                </svg>
+              </a>
+              
+              <form action="{{ route('produits.destroy', $p->id) }}" method="POST" style="display: inline;">
+                @csrf
+                @method('delete')
+                <button type="submit" class="action-icon delete-icon" 
+                        onclick="return confirm('Are you sure you want to delete this product?')"
+                        style="border: none; background: rgba(245, 101, 101, 0.2);">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/>
+                  </svg>
+                </button>
+              </form>
+            @endif
+          </div>
+        </div>
+      </div>
+    </div>
+    @endforeach
+  </div>
 </div>
-<div class="d-flex justify-content-center mt-4">
+
+<!-- No Products Message -->
+<div id="no-products-message" class="text-center py-5" style="display: none;">
+  <div class="no-products-container">
+    <h3 class="text-white mb-2">NO PRODUCTS ARE IN THIS PAGE</h3>
+    <p class="text-gray-400">LOOK IN OTHER PAGINATION</p>
+  </div>
+</div>
+
+<div class="d-flex justify-content-center mt-5 mb-4">
   {{ $produits->links('vendor.pagination.custom') }}
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const brandButtons = document.querySelectorAll('.brand-btn');
+  const productCards = document.querySelectorAll('.product-card');
+  const paginationLinks = document.querySelectorAll('.pagination a');
+  const noProductsMessage = document.getElementById('no-products-message');
+
+  brandButtons.forEach(button => {
+    button.addEventListener('click', function() {
+      // Remove active class from all buttons
+      brandButtons.forEach(btn => btn.classList.remove('active'));
+      // Add active class to clicked button
+      this.classList.add('active');
+
+      const selectedBrand = this.dataset.brand;
+      let visibleProducts = 0;
+
+      productCards.forEach(card => {
+        const productContent = card.querySelector('.product-description').textContent.toLowerCase();
+        
+        if (selectedBrand === 'all' || productContent.includes(selectedBrand.toLowerCase())) {
+          card.style.display = 'block';
+          visibleProducts++;
+        } else {
+          card.style.display = 'none';
+        }
+      });
+
+      // Show/hide no products message
+      if (visibleProducts === 0) {
+        noProductsMessage.style.display = 'block';
+      } else {
+        noProductsMessage.style.display = 'none';
+      }
+    });
+  });
+
+  // Store the selected brand in localStorage when changing pages
+  paginationLinks.forEach(link => {
+    link.addEventListener('click', function(e) {
+      const activeBrand = document.querySelector('.brand-btn.active');
+      if (activeBrand) {
+        localStorage.setItem('selectedBrand', activeBrand.dataset.brand);
+      }
+    });
+  });
+
+  // Restore the selected brand when page loads
+  const savedBrand = localStorage.getItem('selectedBrand');
+  if (savedBrand) {
+    const brandButton = document.querySelector(`.brand-btn[data-brand="${savedBrand}"]`);
+    if (brandButton) {
+      brandButton.click();
+    }
+    localStorage.removeItem('savedBrand');
+  }
+});
+</script>
+
 @endsection

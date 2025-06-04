@@ -39,7 +39,7 @@ tr:nth-child(even){background-color: #f9f9f9;}         tr:hover {background-colo
         <tr> 
             <td>{{ $item->Titre }}</td> 
             <td>
-                <img src="{{ $item->Img }}" alt="" >
+                <img src="{{ public_path($item->Img) }}" alt="{{ $item->Titre }}" style="max-width: 150px; height: auto;">
             </td>            
             <td>{{ $item->Price }} </td> 
             <td>{{ $item->Categorie }}</td> 

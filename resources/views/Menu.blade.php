@@ -4,17 +4,17 @@
     <a href="/" class="logo">
       <img src="/img/Logo.png" width="110" height="53" alt="unigine home">
     </a>
-    <li class="nav-item" style="margin-top: 2%; position: relative;">
+    <li class="nav-item" style="margin-top: 2%; position: relative;margin-left: 2%">
       <form id="localeForm" action="{{ url('/') }}" method="get">
-          <select id="locale" name="lang" onchange="changeLocale()" 
-                  style="border: 2px solid #007BFF; 
-                         border-radius: 8px; 
-                         padding: 5px 10px; 
-                         background: #f8f9fa; 
-                         color: #333; 
-                         font-weight: bold; 
-                         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
-                         cursor: pointer; 
+          <select id="locale" name="lang" onchange="changeLocale()"
+                  style="border: 2px solid #007BFF;
+                         border-radius: 8px;
+                         padding: 5px 10px;
+                         background: #f8f9fa;
+                         color: #333;
+                         font-weight: bold;
+                         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+                         cursor: pointer;
                          transition: all 0.3s ease;">
               <option value="ar" {{ App::getLocale() == 'ar' ? 'selected' : '' }}>العربية</option>
               <option value="fr" {{ App::getLocale() == 'fr' ? 'selected' : '' }}>Français</option>
@@ -22,7 +22,7 @@
           </select>
       </form>
   </li>
-  
+
     <nav class="navbar" data-navbar>
       <ul class="navbar-list">
 
@@ -32,7 +32,7 @@
 
 
         <li class="navbar-item">
-          <a href="/Produits/Games" class="navbar-link" data-nav-link>{{trans('home.nav2')}}</a>
+          <a href="/Produits/Components" class="navbar-link" data-nav-link>{{trans('home.nav2')}}</a>
         </li>
 
         <li class="navbar-item">
@@ -47,19 +47,22 @@
         <li class="navbar-item">
           <a href="/Produits/Setup" class="navbar-link" data-nav-link>{{trans('home.nav5')}}</a>
         </li>
+        <li class="navbar-item">
+          <a href="/chatbot" class="navbar-link" data-nav-link>Chatbot</a>
+        </li>
         @if(Auth::check())
       @if(Auth::user()->role === App\Models\User::ROLE_ADMIN)
       <li class="navbar-item">
-      <a href="/produits/create" class="navbar-link" data-nav-link>{{trans('home.navA')}}</a>
-      
+      <a href="/dashboard" class="navbar-link" data-nav-link>{{trans('home.navA')}}</a>
+
       </li>
       <li class="navbar-item">
-        <a href="/email-form" class="navbar-link" >Send Email</a>      
+        <a href="/email-form" class="navbar-link" >Send Email</a>
       </li>
-    @elseif(Auth::user()->role === App\Models\User::ROLE_USER) 
+    @elseif(Auth::user()->role === App\Models\User::ROLE_USER)
 
       <li class="navbar-item">
-      <a href="/EspaceClient" class="navbar-link" data-nav-link>{{trans('home.navCc')}}</a>
+      <a href="/dashboard" class="navbar-link" data-nav-link>{{trans('home.navCc')}}</a>
       </li>
       <li class="navbar-item">
       <a href="/cart" class="navbar-link" data-nav-link>{{trans('home.navCs')}}</a>
@@ -89,7 +92,7 @@
   </ul>
   </nav>
 
-  
+
 
   <button class="nav-toggle-btn" aria-label="toggle menu" data-nav-toggler>
     <span class="line line-1"></span>
@@ -105,7 +108,7 @@
 <br>
 <br>
 <br>
-  
+
 <script>
     function changeLocale() {
         document.getElementById('localeForm').submit();

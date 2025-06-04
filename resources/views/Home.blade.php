@@ -2,13 +2,31 @@
 @section('title','Console Verse')
 @section("content")
 
+<style>
+  .product-card {
+    width: 250px;
+    height: 400px;
+    /* border: 1px solid #ccc; */
+    padding: 10px;
+    margin: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .product-image {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+  }
+</style>
+
 <div class="containervbn">
     <div class="top-row">
         <div class="aorus-chassis">
             <div class="chassis-content">
                 <h2>AORUS C50X GAMING CHASSIS</h2>
                 <h1>{{trans('home.p1')}}</h1>
-                <a href="#" class="shop-now">{{trans('home.shop')}}→</a>
+                <a href="/Produits/Components" class="shop-now">{{trans('home.shop')}}→</a>
             </div>
         </div>
         <div class="gaming-collection">
@@ -16,7 +34,7 @@
                 <h2>{{trans('home.p2')}}</h2>
                 <h1>{{trans('home.p3')}} </h1>
             </div>
-            <a href="#" class="shop-now">{{trans('home.discover')}} →</a>
+            <a href="/Produits/Components" class="shop-now">{{trans('home.discover')}} → </a>
         </div>
     </div>
     <div class="bottom-row">
@@ -24,13 +42,13 @@
             <h2>{{trans('home.nvidia')}}</h2>
             <h1>GEFORCE RTX 50 SERIES</h1>
             <div class="price">$899.99</div>
-            <a href="#" class="shop-now">{{trans('home.shop')}}→</a>
+            <a href="/Produits/Components" class="shop-now">{{trans('home.shop')}}→</a>
         </div>
-        <div class="aorus-elite">
+        <div class="aorus-elite"> 
             <h2>{{trans('home.ao')}}</h2>
             <h1>AORUS MOUSE,KEYBOARD</h1>
             <div class="price">$199.99</div>
-            <a href="#" class="shop-now">{{trans('home.shop')}} →</a>
+            <a href="/Produits/Accescoires" class="shop-now">{{trans('home.shop')}} →</a>
         </div>
     </div>
     <h1 class="trending">{{trans('home.trend')}}</h1>

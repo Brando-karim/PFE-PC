@@ -39,22 +39,19 @@ public function EspaceClient(){
 
 }
  public function cataloguepdf(){
-
      $produits = Article::where('Solde',"=", 1)->get();
+     $data = [ 'produits' => $produits,];
 
-
-
-
-    $data = [ 'produits' => $produits,];
-
-     // Générer le PDF
-     $pdf =Pdf::loadView('catalogue',$data);
+     // Configure PDF options
+     $pdf = Pdf::loadView('catalogue', $data);
+     $pdf->setOptions([
+         'isRemoteEnabled' => true,
+         'isHtml5ParserEnabled' => true,
+         'isPhpEnabled' => true,
+         'chroot' => public_path(),
+     ]);
 
      // Télécharger le PDF
      return $pdf->stream();
-
-
-
-
    }
 }

@@ -17,7 +17,9 @@ class PaymentController extends Controller
 
         if ($cart) {
             foreach ($cart as $id => $details) {
-                $total += floatval($details['prix']) * $details['quantity'];
+                $originalPrice = floatval($details['prix']);
+                $discountedPrice = !empty($details['Solde']) ? $originalPrice * 0.9 : $originalPrice;
+                $total += $discountedPrice * $details['quantity'];
             }
         }
 
@@ -36,7 +38,9 @@ class PaymentController extends Controller
 
         if ($cart) {
             foreach ($cart as $id => $details) {
-                $total += floatval($details['prix']) * $details['quantity'];
+                $originalPrice = floatval($details['prix']);
+                $discountedPrice = !empty($details['Solde']) ? $originalPrice * 0.9 : $originalPrice;
+                $total += $discountedPrice * $details['quantity'];
             }
         }
 
